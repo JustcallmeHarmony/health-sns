@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  StyleSheet,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import CommentsModal from '../components/CommentsModal';
@@ -66,7 +67,7 @@ const dummy_feed = [
     name: '투게더런',
     profileImg: 'https://avatar.iran.liara.run/public',
     feedImg: ['https://picsum.photos/200/200'],
-    contents: '내 마음...받아줘',
+    contents: '같이 뛰러가자~',
   },
   {
     id: 12,
@@ -78,14 +79,14 @@ const dummy_feed = [
       'https://picsum.photos/400/400',
       'https://picsum.photos/400/400',
     ],
-    contents: '같이 달려봐요',
+    contents: '헬스 클럽 ㄱ?',
   },
   {
     id: 13,
     name: '축구인',
     profileImg: 'https://avatar.iran.liara.run/public',
     feedImg: ['https://picsum.photos/400/400', 'https://picsum.photos/400/400'],
-    contents: '내 마음...받아줘',
+    contents: '같이 축구 ㄱ?',
   },
   {
     id: 14,
@@ -97,7 +98,7 @@ const dummy_feed = [
       'https://picsum.photos/400/400',
       'https://picsum.photos/400/400',
     ],
-    contents: '내 마음...받아줘',
+    contents: '나는 슈터..!',
   },
 ];
 
@@ -145,153 +146,93 @@ const Home = () => {
     fetchMoreData();
   }, []);
 
-  const renderStory = ({item, index}) => {
+  const renderStory = ({ item, index }) => {
     return (
       <TouchableOpacity
-        style={index === 0 ? {marginHorizontal: 16} : {marginRight: 16}}>
+        style={index === 0 ? styles.storyContainerFirst : styles.storyContainer}>
         <Image
-          source={{uri: item.profileImg}}
-          style={
-            item.isOpen
-              ? {width: 52, height: 52, marginBottom: 2}
-              : {
-                  width: 52,
-                  height: 52,
-                  marginBottom: 2,
-                  borderWidth: 2,
-                  borderColor: '#2a85ff',
-                  borderRadius: 26,
-                }
-          }
+          source={{ uri: item.profileImg }}
+          style={item.isOpen ? styles.storyProfileImgOpen : styles.storyProfileImg}
         />
-        <Text
-          numberOfLines={1}
-          style={{
-            maxWidth: 52,
-            fontSize: 13,
-            fontWeight: '400',
-            lineHeight: 16.22,
-            color: '#4f4f4f',
-          }}>
+        <Text numberOfLines={1} style={styles.storyName}>
           {item.name}
         </Text>
       </TouchableOpacity>
     );
   };
 
-  const renderFeed = ({item, index}) => {
+  const renderFeed = ({ item, index }) => {
     return (
-      <View style={{paddingVertical: 24}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginHorizontal: 16,
-            marginBottom: 8,
-          }}>
-          <TouchableOpacity
-            style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
+      <View style={styles.feedContainer}>
+        <View style={styles.feedHeader}>
+          <TouchableOpacity style={styles.feedUserInfo}>
             <Image
-              source={{uri: item.profileImg}}
-              style={{width: 32, height: 32}}
+              source={{ uri: item.profileImg }}
+              style={styles.feedUserImg}
             />
-            <Text style={{fontSize: 16, fontWeight: '400', lineHeight: 19.97}}>
-              {item.name}
-            </Text>
+            <Text style={styles.feedUserName}>{item.name}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setFeedModal(!feedModal)}>
-            <Image source={more} style={{width: 24, height: 24}} />
+            <Image source={more} style={styles.moreIcon} />
           </TouchableOpacity>
         </View>
 
-        {/* 사진이 2장 이상인 경우에만 스와이프 기능 적용 */}
         {item.feedImg.length > 1 ? (
-          <Swiper
-            style={{height: width, marginHorizontal: 16}}
-            loop={false}
-            showsPagination={true}>
+          <Swiper style={styles.swiperContainer} loop={false} showsPagination={true}>
             {item.feedImg.map((image, index) => (
               <Image
                 key={index}
-                source={{uri: image}}
-                style={{width: width - 32, height: width, borderRadius: 38}}
+                source={{ uri: image }}
+                style={styles.feedImage}
                 resizeMode="contain"
               />
             ))}
           </Swiper>
         ) : (
-          // 사진이 1장인 경우에는 스와이프 기능 적용하지 않음
-          <View style={{marginLeft: 16, marginRight: 16}}>
+          <View style={styles.singleImageContainer}>
             <Image
-              source={{uri: item.feedImg[0]}}
-              style={{
-                width: width - 32,
-                height: width,
-                marginBottom: 8,
-                borderRadius: 38,
-              }}
+              source={{ uri: item.feedImg[0] }}
+              style={styles.singleImage}
               resizeMode="contain"
             />
           </View>
         )}
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            marginBottom: 16,
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-              marginTop: 16,
-            }}>
+        <View style={styles.feedFooter}>
+          <View style={styles.feedFooterLeft}>
             <TouchableOpacity
               onPress={() => handleHeartClick(item.id)}
-              style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                source={feedHeart}
-                style={{width: 24, height: 24, marginRight: 4}}
-              />
+              style={styles.commentIconContainer}>
+              <Image source={feedHeart} style={styles.heartIcon} />
               <Text>{item.likeCount || 0}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center'}}
+              style={styles.commentIconContainer}
               onPress={() => setIsVisible(!isVisible)}>
-              <Image
-                source={comment}
-                style={{width: 24, height: 24, marginRight: 4}}
-              />
+              <Image source={comment} style={styles.commentIcon} />
               <Text>1</Text>
             </TouchableOpacity>
           </View>
-          <Text style={{marginTop: 16}}>
+          <Text style={styles.likesText}>
             <Image
-              source={{uri: 'https://avatar.iran.liara.run/public'}}
-              style={{width: 16, height: 16}}
+              source={{ uri: 'https://avatar.iran.liara.run/public' }}
+              style={styles.likesImage}
             />{' '}
             외 {item.likeCount || 0}이 좋아합니다.
           </Text>
         </View>
-        <View style={{marginHorizontal: 16, gap: 4}}>
+        <View style={styles.feedContent}>
           <Text>{item.name}</Text>
-          <Text style={{fontWeight: '400', color: '#4f4f4f'}}>
-            {item.contents}
-          </Text>
+          <Text style={styles.feedText}>{item.contents}</Text>
         </View>
-        <View style={{borderWidth: 1, marginTop: 60}}></View>
+        <View style={styles.divider}></View>
       </View>
     );
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#eef0ed'}}>
-      <View style={{flex: 1, marginBottom: 32}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#eef0ed' }}>
+      <View style={{ flex: 1, marginBottom: 32 }}>
         <FlatList
           data={feeds}
           renderItem={renderFeed}
@@ -300,40 +241,30 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={() => (
             <View>
-              <View
-                style={{
-                  padding: 16,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <Image source={title} style={{width: 90, height: 30}} />
-                <View
-                  style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+              <View style={styles.headerContainer}>
+                <Image source={title} style={styles.titleImage} />
+                <View style={styles.headerIconsContainer}>
                   <TouchableOpacity>
-                    <Image source={heart} style={{width: 32, height: 32}} />
+                    <Image source={heart} style={styles.headerIcon} />
                   </TouchableOpacity>
                   <TouchableOpacity>
-                    <Image source={chat} style={{width: 32, height: 32}} />
+                    <Image source={chat} style={styles.headerIcon} />
                   </TouchableOpacity>
                 </View>
               </View>
-              <View>
-                <FlatList
-                  data={dummy_story}
-                  renderItem={renderStory}
-                  keyExtractor={item => item.id.toString()}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  removeClippedSubviews
-                />
-              </View>
-              <View style={{borderWidth: 1, marginTop: 16}}></View>
+              <FlatList
+                data={dummy_story}
+                renderItem={renderStory}
+                keyExtractor={item => item.id.toString()}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                removeClippedSubviews
+              />
+              <View style={styles.storyDivider}/>
             </View>
           )}
-          // 스크롤이 끝에 도달하면 새로운 데이터를 불러오는 함수 호출
           onEndReached={fetchMoreData}
-          onEndReachedThreshold={0.1} // 끝에 도달하기 전에 얼마나 멀리 미리 호출할지 설정
+          onEndReachedThreshold={0.1}
         />
         <CommentsModal isVisible={isVisible} setIsVisible={setIsVisible} />
         <FeedModal isVisible={feedModal} setFeedModal={setFeedModal} />
@@ -341,5 +272,152 @@ const Home = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  titleImage: {
+    width: 90,
+    height: 30,
+  },
+  headerIconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerIcon: {
+    width: 32,
+    height: 32,
+  },
+  storyContainerFirst: {
+    marginHorizontal: 16,
+  },
+  storyContainer: {
+    marginRight: 16,
+  },
+  storyProfileImg: {
+    width: 52,
+    height: 52,
+    marginBottom: 2,
+  },
+  storyProfileImgOpen: {
+    width: 52,
+    height: 52,
+    marginBottom: 2,
+    borderWidth: 2,
+    borderColor: '#2a85ff',
+    borderRadius: 26,
+  },
+  storyName: {
+    maxWidth: 52,
+    fontSize: 13,
+    fontWeight: '400',
+    lineHeight: 16.22,
+    color: '#4f4f4f',
+  },
+  storyDivider: {
+    borderWidth: 1,
+    marginTop: 16,
+  },
+  feedContainer: {
+    paddingVertical: 24,
+  },
+  feedHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginBottom: 8,
+  },
+  feedUserInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  feedUserImg: {
+    width: 32,
+    height: 32,
+  },
+  feedUserName: {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 19.97,
+  },
+  moreIcon: {
+    width: 24,
+    height: 24,
+  },
+  swiperContainer: {
+    height: width,
+    marginHorizontal: 16,
+  },
+  feedImage: {
+    width: width - 32,
+    height: width,
+    borderRadius: 38,
+  },
+  singleImageContainer: {
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  singleImage: {
+    width: width - 32,
+    height: width,
+    marginBottom: 8,
+    borderRadius: 38,
+  },
+  feedFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  feedFooterLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 16,
+  },
+  heartIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 4,
+  },
+  commentIconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  commentIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 4,
+  },
+  likesText: {
+    marginTop: 16,
+  },
+  likesImage: {
+    width: 16,
+    height: 16,
+  },
+  feedContent: {
+    marginHorizontal: 16,
+    gap: 4,
+  },
+  feedText: {
+    fontWeight: '400',
+    color: '#4f4f4f',
+  },
+  divider: {
+    borderWidth: 1,
+    marginTop: 60,
+  },
+
+});
+
 
 export default Home;

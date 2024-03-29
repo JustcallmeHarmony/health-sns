@@ -53,7 +53,7 @@ const CustomBottomTab = ({state, navigation, insets, descriptors}) => {
               return bool ? homeOn : homeOff;
             case 'SearchTab':
               return bool ? searchOn : searchOff;
-            case 'Feed':
+            case 'FeedTab':
               return addOn;
             case 'Play':
               return bool ? playOn : playOff;

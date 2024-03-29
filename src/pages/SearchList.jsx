@@ -25,13 +25,13 @@ const SearchList = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      <View style={{flex: 1}}>
+    <SafeAreaView style={styles.safeAreaContainer}>
+      <View style={styles.secondContainer}>
         <View style={styles.searchContainer}>
           <View style={styles.searchWrapper}>
             <View style={styles.searchSection}>
               <TouchableOpacity style={styles.searchIconStyle}>
-                <Image source={searchIcon} style={{width: 24, height: 24}} />
+                <Image source={searchIcon} style={styles.searchIcon} />
               </TouchableOpacity>
               <TextInput
                 returnKeyType='search'
@@ -63,11 +63,11 @@ const SearchList = () => {
           <View>
             <View style={styles.recentKeywordRow}>
               <TouchableOpacity style={styles.recentKeywordUser}>
-                <Image source={{uri: 'https://picsum.photos/130/130'}} style={{width:40, height:40, borderRadius:20}}/>
+                <Image source={{uri: 'https://picsum.photos/130/130'}} style={styles.recentKeywordUserIcon}/>
                 <Text>Lucymartin_3</Text>
               </TouchableOpacity>
               <TouchableOpacity>
-                <Image source={keywordDeleteIcon} style={{width:40, height:40}}/>
+                <Image source={keywordDeleteIcon} style={styles.keywordDeleteIcon}/>
               </TouchableOpacity>
             </View>
           </View>
@@ -78,6 +78,12 @@ const SearchList = () => {
 };
 
 const styles = StyleSheet.create({
+  safeAreaContainer: {
+    flex: 1, backgroundColor: '#fff'
+  },
+  secondContainer: {
+    flex: 1
+  },
   searchContainer: {
     height: 68,
     backgroundColor: '#fff',
@@ -105,6 +111,9 @@ const styles = StyleSheet.create({
   searchIconStyle: {
     marginLeft: 16,
     marginRight: 2,
+  },
+  searchIcon : {
+    width: 24, height: 24
   },
   inputStyle: {
     flex: 1,
@@ -146,6 +155,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems:'center',
     gap:11
+  },
+  recentKeywordUserIcon: {
+    width:40, height:40, borderRadius:20
+  },
+  keywordDeleteIcon : {
+    width:40, height:40
   }
+
 });
 export default SearchList;
