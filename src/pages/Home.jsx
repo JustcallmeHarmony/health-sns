@@ -102,7 +102,7 @@ const dummy_feed = [
   },
 ];
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [isVisible, setIsVisible] = useState(false); // 콘텐츠 모달 상태
   const [feedModal, setFeedModal] = useState(false); // 피드 모달 상태
   const [feeds, setFeeds] = useState(dummy_feed);
@@ -247,7 +247,7 @@ const Home = () => {
                   <TouchableOpacity>
                     <Image source={heart} style={styles.headerIcon} />
                   </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigation.navigate('DmList')}>
                     <Image source={chat} style={styles.headerIcon} />
                   </TouchableOpacity>
                 </View>
@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     width: width - 32,
     height: width,
     marginBottom: 8,
-    borderRadius: 38,
+    borderRadius:30,
   },
   feedFooter: {
     flexDirection: 'row',

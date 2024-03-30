@@ -63,75 +63,90 @@ const dummy_FeedImage = [
 
 ]
 
-// 갤러리에서 이미지 선택
-const pickImageFromGallery = () => {
-    ImagePicker.openPicker({
+
+const Feed = ({ navigation }) => {
+    const [selectedItem, setSelectedItem] = useState(null);
+  
+    const pickImageFromGallery = () => {
+      ImagePicker.openPicker({
         width: 300,
         height: 400,
         cropping: true,
         multiple: true
-      }).then(image => {
-        console.log(image);
+      }).then(images => {
+        images.forEach(image => {
+          console.log('Selected Image:', image.path);
+          setSelectedItem(image.path); // 선택한 이미지 경로를 상태에 설정
+        });
       });
-};
-
-
-
-const Feed = ({ navigation }) => {
-    const [selectedItem, setSelectedItem] = useState(null);
-
+    };
+  
     const renderItem = ({ item }) => {
-        return (
-            <TouchableOpacity style={styles.renderContainer} onPress={() => setSelectedItem(item.img)}>
-                <Image source={{ uri: item.img }} style={{ width: width / 4, height: width / 4 }} />
-            </TouchableOpacity>
-        )
-    }
+      return (
+        <TouchableOpacity  style={styles.renderContainer} onPress={() => setSelectedItem(item.img)}>
+          <Image source={{ uri: item.img }} style={{ width: width / 4, height: width / 4 }} />
+        </TouchableOpacity>
+      );
+    };
 
-    React.useEffect(() => {
-        console.log("Selected Item:", selectedItem);
-    }, [selectedItem]);
+    console.log('selectedItem:', selectedItem); 
 
+
+    
     return (
-        <SafeAreaView style={styles.safeAreaContainer}>
-            <FeedHeader navigation={navigation} />
-            <View style={styles.photoContainer}>
-                {selectedItem ? <Image source={{ uri: selectedItem }} style={{ width: width, height: width }} /> 
-                : <Image source={photo} style={{ width: width, height: width }} />}
-            </View>
-            <TouchableOpacity onPress = {pickImageFromGallery}style={styles.resent}>
-                <Text style={styles.resentText}>최근</Text>
-                <View style={styles.resentIcon}>
-                    {greaterIcon}
-                </View>
-            </TouchableOpacity>
-            <FlatList
-                data={dummy_FeedImage}
-                renderItem={renderItem}
-                keyExtractor={item => item.id.toString()}
-                showsVerticalScrollIndicator={false}
-                removeClippedSubviews
-                numColumns={4} />
-        </SafeAreaView>
-    )
-}
+      <SafeAreaView style={styles.safeAreaContainer}>
+        <FeedHeader navigation={navigation} />
+        <View style={styles.photoContainer}>
+          {selectedItem ? <Image source={{ uri: selectedItem }} style={{ width: width, height: width }} />
+            : <Image source={photo} style={{ width: width, height: width }} />}
+        </View>
+        <TouchableOpacity onPress={pickImageFromGallery} style={styles.resent}>
+          <Text style={styles.resentText}>최근</Text>
+          <View style={styles.resentIcon}>
+            {greaterIcon}
+          </View>
+        </TouchableOpacity>
+        <FlatList
+          data={dummy_FeedImage}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          removeClippedSubviews
+          numColumns={4} />
+        <TouchableOpacity
+         style={styles.nextButton}
+         onPress={() => navigation.navigate('NextFeed', { selectedItem: selectedItem })}>
+         <Text style={styles.nextButtonText}>다음</Text>
+</TouchableOpacity>
 
-const styles = StyleSheet.create({
+      </SafeAreaView>
+    );
+  };
+  
+  const styles = StyleSheet.create({
     safeAreaContainer: {},
     photoContainer: {
-        marginTop: 20,
-        width: width
+      marginTop: 20,
+      width: width
     },
     resent: {
-        flexDirection: 'row', alignItems: 'center', gap: 4, padding: 16
+      flexDirection: 'row', alignItems: 'center', gap: 4, padding: 16
     },
     resentText: {
-        fontSize: 17, fontWeight: 'bold'
+      fontSize: 17, fontWeight: 'bold'
     },
     resentIcon: {
-        transform: [{ rotate: `90deg` }]
+      transform: [{ rotate: `90deg` }]
+    },
+    nextButton: {
+      backgroundColor: 'blue',
+      padding: 16,
+      alignItems: 'center'
+    },
+    nextButtonText: {
+      color: 'white',
+      fontWeight: 'bold'
     }
-
-});
-
-export default Feed;
+  });
+  
+  export default Feed;

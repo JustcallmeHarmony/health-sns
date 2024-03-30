@@ -2,7 +2,7 @@ import React from "react";
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Chat from "./pages/Chat";
+import MyPage from "./pages/MyPage";
 import Search from "./pages/Search";
 import MakeFeed from "./pages/MakeFeed";
 import Home from "./pages/Home";
@@ -10,6 +10,7 @@ import Play from "./pages/Play";
 import CustomBottomTab from "./components/CustomBottomTab";
 import SearchList from "./pages/SearchList";
 import MakeNextFeed from "./pages/MakeNextFeed";
+import DmList from "./pages/DmList";
 
 
 const Stack = createStackNavigator();
@@ -17,6 +18,18 @@ const Tab = createBottomTabNavigator();
   
 
 const renderTabBar = (props) => <CustomBottomTab {...props} />;
+
+const HomeTab = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <Stack.Screen name="Home" component={Home}/>
+      <Stack.Screen name="DmList" component={DmList}/>
+    </Stack.Navigator>
+
+  )
+}
 
 const SearchTab = () => {
   return (
@@ -46,11 +59,11 @@ const FeedTab = () => {
   const MainTab = () => {
     return (
       <Tab.Navigator tabBar={renderTabBar} screenOptions={{headerShown: false}}>
-        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="HomeTab" component={HomeTab} />
         <Tab.Screen name="SearchTab" component={SearchTab} />
         <Tab.Screen name="FeedTab" component={FeedTab} />
         <Tab.Screen name="Play" component={Play} />
-        <Tab.Screen name="Chat" component={Chat} />
+        <Tab.Screen name="MyPage" component={MyPage} />
 
       
       </Tab.Navigator>

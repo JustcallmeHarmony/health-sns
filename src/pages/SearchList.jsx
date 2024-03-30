@@ -8,7 +8,8 @@ import {
   StyleSheet,
   Dimensions,
   TextInput,
-  Keyboard
+  Keyboard,
+  FlatList
 } from 'react-native';
 
 const searchIcon = require('../assets/icons/search.png');
@@ -16,12 +17,56 @@ const keywordDeleteIcon = require('../assets/icons/keywordDelete.png');
 
 const {width} = Dimensions.get('window');
 
+dummy_search = [
+  {
+    id : 60,
+    profileImg: 'https://avatar.iran.liara.run/public',
+    name : '김길동',
+  },
+  {
+    id : 61,
+    profileImg: 'https://avatar.iran.liara.run/public',
+    name : '안녕하세요',
+  },
+  {
+    id : 62,
+    profileImg: 'https://avatar.iran.liara.run/public',
+    name : '삼길동',
+  },
+  {
+    id : 63,
+    profileImg: 'https://avatar.iran.liara.run/public',
+    name : '사길동',
+  },
+]
+
+
 const SearchList = () => {
   const [keyword, setKeyword] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleCancleButton = () => {
     setKeyword('');
     Keyboard.dismiss();
+  }
+
+  const handleSearch = () => {
+    
+    setSearchResults(dummy_search);
+  }
+
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.recentKeywordRow}>
+        <TouchableOpacity style={styles.recentKeywordUser}>
+          <Image source={{ uri: item.profileImg }} style={styles.recentKeywordUserIcon} />
+          <Text>{item.name}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={keywordDeleteIcon} style={styles.keywordDeleteIcon} />
+        </TouchableOpacity>
+      </View>
+    )
   }
 
   return (
@@ -35,20 +80,18 @@ const SearchList = () => {
               </TouchableOpacity>
               <TextInput
                 returnKeyType='search'
-                // placeholder='검색어를 입력하세요'
-                // placeholderTextColor='#828282'
                 spellCheck={false}
                 autoCorrect={false}
                 autoCapitalize="none"
                 value={keyword}
-                onChange={text => setKeyword(text)}
+                onChangeText={text => setKeyword(text)}
                 allowFontScaling={false}
                 style={styles.inputStyle}
                 autoFocus
-                onSubmitEditing={() => console.log('검색 API 호출')}
+                onSubmitEditing={handleSearch} // 검색어 입력 후 엔터를 누르면 handleSearch 함수 호출
               />
             </View>
-            <TouchableOpacity onPress={()=> handleCancleButton()}>
+            <TouchableOpacity onPress={handleCancleButton}>
               <Text style={styles.cancleText}>취소</Text>
             </TouchableOpacity>
           </View>
@@ -61,15 +104,11 @@ const SearchList = () => {
             </TouchableOpacity>
           </View>
           <View>
-            <View style={styles.recentKeywordRow}>
-              <TouchableOpacity style={styles.recentKeywordUser}>
-                <Image source={{uri: 'https://picsum.photos/130/130'}} style={styles.recentKeywordUserIcon}/>
-                <Text>Lucymartin_3</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image source={keywordDeleteIcon} style={styles.keywordDeleteIcon}/>
-              </TouchableOpacity>
-            </View>
+            <FlatList
+              data={searchResults}
+              renderItem={renderItem}
+              keyExtractor={item => item.id.toString()}
+            />
           </View>
         </View>
       </View>

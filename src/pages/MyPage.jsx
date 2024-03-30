@@ -1,10 +1,10 @@
 import React from "react";
 import { Text,View } from 'react-native'
 
-const Chat = () => {
+const MyPage = () => {
     return (
-        <View><Text>Chat</Text></View>
+        <View><Text>MyPage</Text></View>
     )
 }
 
-export default Chat;
+export default MyPage;
