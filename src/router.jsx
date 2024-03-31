@@ -11,6 +11,7 @@ import CustomBottomTab from "./components/CustomBottomTab";
 import SearchList from "./pages/SearchList";
 import MakeNextFeed from "./pages/MakeNextFeed";
 import DmList from "./pages/DmList";
+import Dm from "./pages/Dm";
 
 
 const Stack = createStackNavigator();
@@ -26,6 +27,7 @@ const HomeTab = () => {
     }}>
       <Stack.Screen name="Home" component={Home}/>
       <Stack.Screen name="DmList" component={DmList}/>
+      <Stack.Screen name="Dm" component={Dm}/>
     </Stack.Navigator>
 
   )

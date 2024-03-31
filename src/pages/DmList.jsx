@@ -74,6 +74,7 @@ const DmList = ({navigation}) => {
 
     const renderItem = ({item}) => {
         return (
+            <TouchableOpacity onPress={() => navigation.navigate('Dm')}>
             <View style={styles.itemContainer}>
                 <Image source={{uri: item.profileImg}} style={styles.profileImage} />
                 <View style={styles.textContainer}>
@@ -84,6 +85,7 @@ const DmList = ({navigation}) => {
                     </View>
                 </View>
             </View>
+            </TouchableOpacity>
         )
     }
 

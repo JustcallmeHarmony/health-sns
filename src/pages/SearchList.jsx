@@ -12,6 +12,8 @@ import {
   FlatList
 } from 'react-native';
 
+
+
 const searchIcon = require('../assets/icons/search.png');
 const keywordDeleteIcon = require('../assets/icons/keywordDelete.png');
 
@@ -43,26 +45,46 @@ dummy_search = [
 
 const SearchList = () => {
   const [keyword, setKeyword] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(dummy_search);
 
   const handleCancleButton = () => {
     setKeyword('');
     Keyboard.dismiss();
   }
+  
 
   const handleSearch = () => {
-    
-    setSearchResults(dummy_search);
-  }
+    // 텍스트 입력란에 입력된 값을 검색어로 사용하여 검색 결과를 가져옴
+    const filteredResults = dummy_search.filter(item =>
+      item.name.toLowerCase().includes(keyword.toLowerCase())
+    );
+    // 검색 결과를 상태에 반영하여 화면에 출력
+    setSearchResults(filteredResults);
+  };
+  
+
+  const handleAllDelete = () => {
+    // 전체 삭제 버튼을 눌렀을 때 dummy_search 배열 초기화
+    setKeyword('');
+    setSearchResults([]);
+    Keyboard.dismiss();
+  };
+
+  const handleOneDelete = (id) => {
+    const updatedResults = searchResults.filter(item => item.id !== id);
+    setSearchResults(updatedResults);
+  };
+  
 
   const renderItem = ({ item }) => {
     return (
+      
       <View style={styles.recentKeywordRow}>
         <TouchableOpacity style={styles.recentKeywordUser}>
           <Image source={{ uri: item.profileImg }} style={styles.recentKeywordUserIcon} />
           <Text>{item.name}</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleOneDelete(item.id)}>
           <Image source={keywordDeleteIcon} style={styles.keywordDeleteIcon} />
         </TouchableOpacity>
       </View>
@@ -99,7 +121,7 @@ const SearchList = () => {
         <View>
           <View style={styles.recentKeywordContainer}>
             <Text style={styles.recentKeywordLabel}>최근 검색</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleAllDelete}>
               <Text style={styles.allDeleteLabel}>전체삭제</Text>
             </TouchableOpacity>
           </View>
