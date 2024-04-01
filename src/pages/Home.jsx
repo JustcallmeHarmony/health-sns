@@ -12,99 +12,19 @@ import {
 import Swiper from 'react-native-swiper';
 import CommentsModal from '../components/CommentsModal';
 import FeedModal from '../components/FeedModal';
+import {dummy_feed} from '../data/dummy_ feed';
+import HomeHeader from '../components/HomeHeader';
+import StoryList from '../components/StoryList';
 
-const title = require('../assets/images/title.png');
-const chat = require('../assets/icons/chat.png');
-const heart = require('../assets/icons/heart.png');
 const more = require('../assets/icons/more.png');
 const comment = require('../assets/icons/comment.png');
 const feedHeart = require('../assets/icons/feedHeart.png');
 
 const {width} = Dimensions.get('window');
 
-const dummy_story = [
-  {
-    id: 1,
-    name: 'BONG',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    isOpen: false,
-  },
-  {
-    id: 2,
-    name: 'Jeon',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    isOpen: false,
-  },
-  {
-    id: 3,
-    name: 'Park_cha',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    isOpen: true,
-  },
-  {
-    id: 4,
-    name: 'pig0321',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    isOpen: true,
-  },
-  {
-    id: 5,
-    name: 'pig0321',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    isOpen: true,
-  },
-  {
-    id: 6,
-    name: 'pig0321',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    isOpen: true,
-  },
-];
-
-const dummy_feed = [
-  {
-    id: 11,
-    name: '투게더런',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    feedImg: ['https://picsum.photos/200/200'],
-    contents: '같이 뛰러가자~',
-  },
-  {
-    id: 12,
-    name: '헬스인',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    feedImg: [
-      'https://picsum.photos/400/400',
-      'https://picsum.photos/400/400',
-      'https://picsum.photos/400/400',
-      'https://picsum.photos/400/400',
-    ],
-    contents: '헬스 클럽 ㄱ?',
-  },
-  {
-    id: 13,
-    name: '축구인',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    feedImg: ['https://picsum.photos/400/400', 'https://picsum.photos/400/400'],
-    contents: '같이 축구 ㄱ?',
-  },
-  {
-    id: 14,
-    name: '농구인',
-    profileImg: 'https://avatar.iran.liara.run/public',
-    feedImg: [
-      'https://picsum.photos/400/400',
-      'https://picsum.photos/400/400',
-      'https://picsum.photos/400/400',
-      'https://picsum.photos/400/400',
-    ],
-    contents: '나는 슈터..!',
-  },
-];
-
 const Home = ({navigation}) => {
-  const [isVisible, setIsVisible] = useState(false); // 콘텐츠 모달 상태
-  const [feedModal, setFeedModal] = useState(false); // 피드 모달 상태
+  const [isVisibleCommentsModal, setIsVisibleCommentsModal] = useState(false); // 콘텐츠 모달 상태
+  const [isVisibleFeedModal, setIsVisibleFeedModal] = useState(false); // 피드 모달 상태
   const [feeds, setFeeds] = useState(dummy_feed);
   const [page, setPage] = useState(1); // 현재 페이지 번호
 
@@ -146,43 +66,29 @@ const Home = ({navigation}) => {
     fetchMoreData();
   }, []);
 
-  const renderStory = ({ item, index }) => {
-    return (
-      <TouchableOpacity
-        style={index === 0 ? styles.storyContainerFirst : styles.storyContainer}>
-        <Image
-          source={{ uri: item.profileImg }}
-          style={item.isOpen ? styles.storyProfileImgOpen : styles.storyProfileImg}
-        />
-        <Text numberOfLines={1} style={styles.storyName}>
-          {item.name}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderFeed = ({ item, index }) => {
+  const renderFeed = ({item, index}) => {
     return (
       <View style={styles.feedContainer}>
         <View style={styles.feedHeader}>
           <TouchableOpacity style={styles.feedUserInfo}>
-            <Image
-              source={{ uri: item.profileImg }}
-              style={styles.feedUserImg}
-            />
+            <Image source={{uri: item.profileImg}} style={styles.feedUserImg} />
             <Text style={styles.feedUserName}>{item.name}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setFeedModal(!feedModal)}>
+          <TouchableOpacity
+            onPress={() => setIsVisibleFeedModal(!isVisibleFeedModal)}>
             <Image source={more} style={styles.moreIcon} />
           </TouchableOpacity>
         </View>
 
         {item.feedImg.length > 1 ? (
-          <Swiper style={styles.swiperContainer} loop={false} showsPagination={true}>
+          <Swiper
+            style={styles.swiperContainer}
+            loop={false}
+            showsPagination={true}>
             {item.feedImg.map((image, index) => (
               <Image
                 key={index}
-                source={{ uri: image }}
+                source={{uri: image}}
                 style={styles.feedImage}
                 resizeMode="contain"
               />
@@ -191,7 +97,7 @@ const Home = ({navigation}) => {
         ) : (
           <View style={styles.singleImageContainer}>
             <Image
-              source={{ uri: item.feedImg[0] }}
+              source={{uri: item.feedImg[0]}}
               style={styles.singleImage}
               resizeMode="contain"
             />
@@ -208,14 +114,16 @@ const Home = ({navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.commentIconContainer}
-              onPress={() => setIsVisible(!isVisible)}>
+              onPress={() =>
+                setIsVisibleCommentsModal(!isVisibleCommentsModal)
+              }>
               <Image source={comment} style={styles.commentIcon} />
               <Text>1</Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.likesText}>
             <Image
-              source={{ uri: 'https://avatar.iran.liara.run/public' }}
+              source={{uri: 'https://avatar.iran.liara.run/public'}}
               style={styles.likesImage}
             />{' '}
             외 {item.likeCount || 0}이 좋아합니다.
@@ -231,8 +139,8 @@ const Home = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#eef0ed' }}>
-      <View style={{ flex: 1, marginBottom: 32 }}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#eef0ed'}}>
+      <View style={{flex: 1, marginBottom: 32}}>
         <FlatList
           data={feeds}
           renderItem={renderFeed}
@@ -241,88 +149,28 @@ const Home = ({navigation}) => {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={() => (
             <View>
-              <View style={styles.headerContainer}>
-                <Image source={title} style={styles.titleImage} />
-                <View style={styles.headerIconsContainer}>
-                  <TouchableOpacity>
-                    <Image source={heart} style={styles.headerIcon} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate('DmList')}>
-                    <Image source={chat} style={styles.headerIcon} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <FlatList
-                data={dummy_story}
-                renderItem={renderStory}
-                keyExtractor={item => item.id.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                removeClippedSubviews
-              />
-              <View style={styles.storyDivider}/>
+              <HomeHeader navigation={navigation} setIsVisibleCommentsModal />
+              <StoryList data={StoryList} />
             </View>
           )}
           onEndReached={fetchMoreData}
           onEndReachedThreshold={0.1}
         />
-        <CommentsModal isVisible={isVisible} setIsVisible={setIsVisible} />
-        <FeedModal isVisible={feedModal} setFeedModal={setFeedModal} />
+        <CommentsModal
+          isVisible={isVisibleCommentsModal}
+          setIsVisible={setIsVisibleCommentsModal}
+        />
+        <FeedModal
+          navigation={navigation}
+          isVisible={isVisibleFeedModal}
+          setFeedModal={setIsVisibleFeedModal}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    padding: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  titleImage: {
-    width: 90,
-    height: 30,
-  },
-  headerIconsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  headerIcon: {
-    width: 32,
-    height: 32,
-  },
-  storyContainerFirst: {
-    marginHorizontal: 16,
-  },
-  storyContainer: {
-    marginRight: 16,
-  },
-  storyProfileImg: {
-    width: 52,
-    height: 52,
-    marginBottom: 2,
-  },
-  storyProfileImgOpen: {
-    width: 52,
-    height: 52,
-    marginBottom: 2,
-    borderWidth: 2,
-    borderColor: '#2a85ff',
-    borderRadius: 26,
-  },
-  storyName: {
-    maxWidth: 52,
-    fontSize: 13,
-    fontWeight: '400',
-    lineHeight: 16.22,
-    color: '#4f4f4f',
-  },
-  storyDivider: {
-    borderWidth: 1,
-    marginTop: 16,
-  },
   feedContainer: {
     paddingVertical: 24,
   },
@@ -368,7 +216,7 @@ const styles = StyleSheet.create({
     width: width - 32,
     height: width,
     marginBottom: 8,
-    borderRadius:30,
+    borderRadius: 30,
   },
   feedFooter: {
     flexDirection: 'row',
@@ -416,8 +264,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 60,
   },
-
 });
-
 
 export default Home;

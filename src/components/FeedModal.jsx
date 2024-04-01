@@ -4,7 +4,12 @@ import Modal from 'react-native-modal';
 
 const {width, height}= Dimensions.get('window');
 
-const FeedModal = ({isVisible, setFeedModal }) => {
+const FeedModal = ({isVisible, setFeedModal,navigation }) => {
+
+const handleDm = () => {
+  setFeedModal(false);
+  navigation.navigate('Dm');
+} 
   return (
     <Modal
       isVisible={isVisible}
@@ -26,7 +31,7 @@ const FeedModal = ({isVisible, setFeedModal }) => {
           <Text style={styles.optionText}>팔로우 취소</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleDm}>
           <Text style={styles.optionText}>DM 보내기</Text>
         </TouchableOpacity>
 

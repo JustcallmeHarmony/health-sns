@@ -1,65 +1,75 @@
-import React, { useState } from 'react';
-import { SafeAreaView, Text, View, StyleSheet, TouchableOpacity, Image, Dimensions, TextInput, Modal, FlatList } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  TextInput,
+  Modal,
+  FlatList,
+} from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TrackPlayer from 'react-native-track-player';
+import {dummy_tracks} from '../data/dummy_tracks';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const locationIcon = require('../assets/icons/location.png');
 const feedPersonIcon = require('../assets/icons/feedPerson.png');
 const feedArrowIcon = require('../assets/icons/feedArrow.png');
 const closeIcon = <AntDesignIcon name="close" size={20} />;
+const musicIcon = <MaterialCommunityIcons name="music" size={25} />;
 const photo = require('../assets/images/photo.png');
 
-
-
-const dummy_tracks = [
-  { id: 'track1', title: 'Track 1', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-  { id: 'track2', title: 'Track 2', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-  { id: 'track3', title: 'Track 3', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-  { id: 'track4', title: 'Track 4', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-  { id: 'track5', title: 'Track 5', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
-];
-
-
-
-const MakeNextFeed = ({ navigation }) => {
-  // modalVisible 상태를 관리하는 useState 훅
+const MakeNextFeed = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  // 선택된 음악을 저장하는 useState 훅
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedMusic, setSelectedMusic] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false); // 재생 상태 추가
 
-  // 음악을 선택했을 때 호출되는 함수
-  const handleMusicSelect = async (item) => {
-    // 선택된 음악을 selectedItem 상태로 업데이트
-    setSelectedItem(item);
-    // 모달을 닫음
+
+  useEffect(() => {
+    const initializeTrackPlayer = async () => {
+      try {
+        await TrackPlayer.setupPlayer();
+      } catch (error) {
+        console.error('Error initializing TrackPlayer:', error);
+      }
+    };
+
+    initializeTrackPlayer();
+
+    return () => {
+      // Clean up code if needed
+    };
+  }, []);
+
+  const handleMusicSelect = async item => {
+    setSelectedMusic(item);
     setModalVisible(false);
     try {
-      // 트랙 플레이어를 설정
-      await TrackPlayer.setupPlayer();
-      // 현재 재생 중인 음악을 중지
       await TrackPlayer.stop();
-      // 선택된 음악을 트랙 플레이어에 추가
+      await TrackPlayer.reset();
       await TrackPlayer.add({
         id: item.id,
         url: item.url,
         title: item.title,
         artist: 'Unknown Artist',
       });
-      // 선택된 음악을 재생
       await TrackPlayer.play();
+      setIsPlaying(true); // 재생 상태 설정
     } catch (error) {
-      // 에러가 발생하면 콘솔에 에러 메시지 출력
       console.error('Error playing music:', error);
     }
   };
 
-  // 취소 버튼을 눌렀을 때 호출되는 함수
   const handleCancel = async () => {
-    // 모달을 닫음
+    setSelectedMusic(null);
     setModalVisible(false);
-    // 트랙 플레이어를 멈춤
     await TrackPlayer.stop();
+    setIsPlaying(false); // 재생 상태 초기화
   };
 
   return (
@@ -79,7 +89,7 @@ const MakeNextFeed = ({ navigation }) => {
         <Image
           source={photo}
           resizeMode="contain"
-          style={{ width: width - 32, height: width * 0.6 }}
+          style={{width: width - 32, height: width * 0.6}}
         />
         <TextInput
           style={styles.text}
@@ -106,10 +116,12 @@ const MakeNextFeed = ({ navigation }) => {
         </View>
         <Image style={styles.feedArrowIcon} source={feedArrowIcon} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.MusicContainer} onPress={() => setModalVisible(true)}>
-        <View style={styles.MusicIconContainer}>
-          <Image style={styles.feedPersonIcon} source={feedPersonIcon} />
-          <Text>{selectedItem ? selectedItem.title : "노래 선택"}</Text>
+      <TouchableOpacity
+        style={styles.musicContainer}
+        onPress={() => setModalVisible(true)}>
+        <View style={styles.musicIconContainer}>
+          <View style={styles.musicIcon}>{musicIcon}</View>
+          <Text>{selectedMusic ? selectedMusic.title : '노래 선택'}</Text>
         </View>
         <Image style={styles.feedArrowIcon} source={feedArrowIcon} />
       </TouchableOpacity>
@@ -126,9 +138,11 @@ const MakeNextFeed = ({ navigation }) => {
           <View style={styles.modalContent}>
             <FlatList
               data={dummy_tracks}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity style={styles.selectButton} onPress={() => handleMusicSelect(item)}>
+              keyExtractor={item => item.id}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  style={styles.selectButton}
+                  onPress={() => handleMusicSelect(item)}>
                   <Text style={styles.buttonText}>{item.title}</Text>
                 </TouchableOpacity>
               )}
@@ -208,16 +222,20 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  MusicContainer: {
+  musicContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     margin: 16,
   },
-  MusicIconContainer: {
+  musicIconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  musicIcon: {
+    width: 30,
+    height: 30,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -253,6 +271,7 @@ const styles = StyleSheet.create({
     color: '#333',
     fontWeight: 'bold',
     fontSize: 16,
+    marginTop: 10,
   },
   selectButton: {
     backgroundColor: '#4aabff',

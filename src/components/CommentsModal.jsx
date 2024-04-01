@@ -12,24 +12,10 @@ import {
   Keyboard
 } from 'react-native';
 import Modal from 'react-native-modal';
-
+import { dummy_comments } from '../data/dummy_CommentsModal';
 const more = require('../assets/icons/more.png');
 const addButton = require('../assets/icons/bottomtab/add_circle_off.png');
 
-const dummy_comments = [
-  {
-    id: 1,
-    name: 'Jeontaeyung_5812',
-    contents: '와 잘 봤어요!',
-    profileImg: 'https://picsum.photos/60/60',
-  },
-  {
-    id: 2,
-    name: 'Leemin',
-    contents: '잆으신 제품 뭐에요?',
-    profileImg: 'https://picsum.photos/60/60',
-  },
-];
 
 const CommentItem = ({ item, index }) => {
   return (

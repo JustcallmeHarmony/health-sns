@@ -25,7 +25,7 @@ const CustomBottomTab = ({state, navigation, insets, descriptors}) => {
   const tab4iValue = useRef(new Animated.Value(0)).current;
   const tab5iValue = useRef(new Animated.Value(0)).current;
 
-  const scaleAnimated = (Value, animateValue) => 
+  const scaleAnimated = (Value, animateValue) =>
     Animated.timing(animateValue, {
       useNativeDriver: true,
       toValue: Value,
@@ -84,7 +84,7 @@ const CustomBottomTab = ({state, navigation, insets, descriptors}) => {
             key={index}
             activeOpacity={0.7}
             onPress={onPress}
-            style={{flex: 1, alignItems: 'center', backgroundColor:'#eef0ed'}}>
+            style={{flex: 1, alignItems: 'center', backgroundColor: '#eef0ed'}}>
             <Animated.Image
               source={iconFlag(isFocused)}
               style={{

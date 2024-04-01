@@ -9,59 +9,33 @@ import {
   Dimensions,
   TextInput,
   Keyboard,
-  FlatList
+  FlatList,
 } from 'react-native';
 
-
+import {dummy_searchList} from '../data/dummy_SearchList';
 
 const searchIcon = require('../assets/icons/search.png');
 const keywordDeleteIcon = require('../assets/icons/keywordDelete.png');
 
 const {width} = Dimensions.get('window');
 
-dummy_search = [
-  {
-    id : 60,
-    profileImg: 'https://avatar.iran.liara.run/public',
-    name : '김길동',
-  },
-  {
-    id : 61,
-    profileImg: 'https://avatar.iran.liara.run/public',
-    name : '안녕하세요',
-  },
-  {
-    id : 62,
-    profileImg: 'https://avatar.iran.liara.run/public',
-    name : '삼길동',
-  },
-  {
-    id : 63,
-    profileImg: 'https://avatar.iran.liara.run/public',
-    name : '사길동',
-  },
-]
-
-
 const SearchList = () => {
   const [keyword, setKeyword] = useState('');
-  const [searchResults, setSearchResults] = useState(dummy_search);
+  const [searchResults, setSearchResults] = useState(dummy_searchList);
 
   const handleCancleButton = () => {
     setKeyword('');
     Keyboard.dismiss();
-  }
-  
+  };
 
   const handleSearch = () => {
     // 텍스트 입력란에 입력된 값을 검색어로 사용하여 검색 결과를 가져옴
-    const filteredResults = dummy_search.filter(item =>
-      item.name.toLowerCase().includes(keyword.toLowerCase())
+    const filteredResults = dummy_searchList.filter(item =>
+      item.name.toLowerCase().includes(keyword.toLowerCase()),
     );
     // 검색 결과를 상태에 반영하여 화면에 출력
     setSearchResults(filteredResults);
   };
-  
 
   const handleAllDelete = () => {
     // 전체 삭제 버튼을 눌렀을 때 dummy_search 배열 초기화
@@ -70,26 +44,27 @@ const SearchList = () => {
     Keyboard.dismiss();
   };
 
-  const handleOneDelete = (id) => {
+  const handleOneDelete = id => {
     const updatedResults = searchResults.filter(item => item.id !== id);
     setSearchResults(updatedResults);
   };
-  
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
-      
       <View style={styles.recentKeywordRow}>
         <TouchableOpacity style={styles.recentKeywordUser}>
-          <Image source={{ uri: item.profileImg }} style={styles.recentKeywordUserIcon} />
+          <Image
+            source={{uri: item.profileImg}}
+            style={styles.recentKeywordUserIcon}
+          />
           <Text>{item.name}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleOneDelete(item.id)}>
           <Image source={keywordDeleteIcon} style={styles.keywordDeleteIcon} />
         </TouchableOpacity>
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -101,7 +76,7 @@ const SearchList = () => {
                 <Image source={searchIcon} style={styles.searchIcon} />
               </TouchableOpacity>
               <TextInput
-                returnKeyType='search'
+                returnKeyType="search"
                 spellCheck={false}
                 autoCorrect={false}
                 autoCapitalize="none"
@@ -140,10 +115,11 @@ const SearchList = () => {
 
 const styles = StyleSheet.create({
   safeAreaContainer: {
-    flex: 1, backgroundColor: '#fff'
+    flex: 1,
+    backgroundColor: '#fff',
   },
   secondContainer: {
-    flex: 1
+    flex: 1,
   },
   searchContainer: {
     height: 68,
@@ -160,7 +136,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginVertical: 12,
     borderRadius: 4,
-    backgroundColor:'#F8F8F8',
+    backgroundColor: '#F8F8F8',
     gap: 10,
   },
   searchSection: {
@@ -173,8 +149,9 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginRight: 2,
   },
-  searchIcon : {
-    width: 24, height: 24
+  searchIcon: {
+    width: 24,
+    height: 24,
   },
   inputStyle: {
     flex: 1,
@@ -195,7 +172,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 16,
-    marginBottom:24
+    marginBottom: 24,
   },
   recentKeywordLabel: {
     fontSize: 16,
@@ -208,21 +185,23 @@ const styles = StyleSheet.create({
   recentKeywordRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
-    paddingHorizontal:16,
-    marginBottom:20
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    marginBottom: 20,
   },
   recentKeywordUser: {
     flexDirection: 'row',
-    alignItems:'center',
-    gap:11
+    alignItems: 'center',
+    gap: 11,
   },
   recentKeywordUserIcon: {
-    width:40, height:40, borderRadius:20
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
-  keywordDeleteIcon : {
-    width:40, height:40
-  }
-
+  keywordDeleteIcon: {
+    width: 40,
+    height: 40,
+  },
 });
 export default SearchList;

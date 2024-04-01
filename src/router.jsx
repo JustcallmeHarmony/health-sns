@@ -1,5 +1,6 @@
 import React from "react";
 
+
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyPage from "./pages/MyPage";
@@ -16,9 +17,10 @@ import Dm from "./pages/Dm";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-  
+
 
 const renderTabBar = (props) => <CustomBottomTab {...props} />;
+
 
 const HomeTab = () => {
   return (
@@ -50,8 +52,9 @@ const FeedTab = () => {
     <Stack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <Stack.Screen name="MakeFeed" component={MakeFeed}/>
-      <Stack.Screen name="MakeNextFeed" component={MakeNextFeed}/>
+      <Stack.Screen name="MakeFeed" component={MakeFeed} />
+    <Stack.Screen name="MakeNextFeed" component={MakeNextFeed} />
+      
     </Stack.Navigator>
 
   )
