@@ -1,6 +1,4 @@
 import React from "react";
-
-
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyPage from "./pages/MyPage";
@@ -13,6 +11,7 @@ import SearchList from "./pages/SearchList";
 import MakeNextFeed from "./pages/MakeNextFeed";
 import DmList from "./pages/DmList";
 import Dm from "./pages/Dm";
+import Login from "./pages/Login";
 
 
 const Stack = createStackNavigator();
@@ -78,9 +77,8 @@ const FeedTab = () => {
   const Router = () => {
     return (
       <Stack.Navigator screenOptions={{headerShown: false}}>
-       
-        <Stack.Screen name="MainTab" component={MainTab} />
-       
+        {/* <Stack.Screen name="MainTab" component={MainTab} /> */}
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     );
   };

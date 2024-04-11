@@ -49,7 +49,7 @@ const CustomBottomTab = ({state, navigation, insets, descriptors}) => {
 
         const iconFlag = bool => {
           switch (label) {
-            case 'Home':
+            case 'HomeTab':
               return bool ? homeOn : homeOff;
             case 'SearchTab':
               return bool ? searchOn : searchOff;
