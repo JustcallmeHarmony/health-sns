@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {Text,View, TextInput, Button, Alert, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { signIn, signUp } from "../lib/auth"; 
+import {Text,View, TextInput, Button, Alert, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { signIn,  } from "../lib/auth"; 
 import firestore from "@react-native-firebase/firestore"; 
-import { createUser } from "../lib/user";
+
 import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth'
 import  * as KakaoLogin from '@react-native-seoul/kakao-login';
@@ -13,17 +13,21 @@ import { NaverLogin } from "@react-native-seoul/naver-login";
 const naverIcon = require('../assets/icons/naver.png')
 const kakaoIcon = require('../assets/icons/kakao.png')
 const googleIcon = require('../assets/icons/google.png')
-const facebookIcon = require('../assets/icons/facebook.png')
 
 
-const LoginTitle = require('../assets/images/LoginTitle.png')
+
+const LoginTitle = require('../assets/images/title2.png')
 
 
-const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPass] = useState('');
-    const [displayName, setName] = useState('');
+const Login = ({navigation}) => {
+    const [email, setEmail] = useState();
+    const [password, setPass] = useState();
     const [userData, setUserData] = useState(null);
+    const [nickName, setNickName] = useState();
+    const [phoneNumber, setPhoneNumber] = useState();
+
+
+    const {width, height} = Dimensions.get('window')
 
     // useEffect(() => {
     //     NaverLogin.init({
@@ -86,47 +90,39 @@ const Login = () => {
         });
     };
 
-    // 회원가입
-    const onSignUp = async () => {
-        try {
-            const { user } = await signUp({ email, password }); 
-            await createUser ({
-                id: user.uid,
-                displayName,
-                photoURL : null
-            })
-            Alert.alert('회원가입 성공');
-        } catch (e) {
-            Alert.alert('회원가입 실패');
-        }
-    };
-
     // 로그인   
-    const onSignIn = async () => {
-        try {
-            const { user } = await signIn({ email, password }); 
-            // 로그인 정보 가져오기
-            const userCollection = firestore().collection('users');
-            console.log((await userCollection.doc(user.uid).get()).data());
-            await userCollection.doc(user.uid).update({displayName})
-            console.log((await userCollection.doc(user.uid).get()).data());
-            Alert.alert('로그인 성공');
-        } catch (e) {
-            Alert.alert('로그인 실패');
-        }
-    };
+// 로그인   
+const onSignIn = async () => {
+    try {
+        const { user } = await signIn({ email, password }); 
+        // 로그인 정보 가져오기
+        const userCollection = firestore().collection('users');
+        console.log((await userCollection.doc(user.uid).get()).data());
+        // 수정할 때 사용 코드
+        // await userCollection.doc(user.uid).update({nickName})
+        // console.log((await userCollection.doc(user.uid).get()).data());
+        // await userCollection.doc(user.uid).update({phoneNumber})
+        // console.log((await userCollection.doc(user.uid).get()).data());
+       
+        navigation.navigate('MainTab');
+    } catch (e) {
+        console.error('로그인 실패:', e); 
+        Alert.alert('로그인 실패');
+    }
+};
 
+    
     return (
         
         <View style={styles.firstContainer}>
             <View>
-            <Image source={LoginTitle}/>
+            <Image  source={LoginTitle}/>
             <View style={styles.titleTextContainer}>
             <View>
-            <Text style={styles.firstTitleText}>당신의 취미를</Text>
+            <Text style={styles.firstTitleText}>나와 함께 운동하지 않을래?</Text>
             </View>
             <View>
-            <Text style={styles.secondTitleText}>함께할 준비가 되셨나요?</Text>
+            <Text style={styles.secondTitleText}>Are You Ready?</Text>
             </View>
             </View>
             
@@ -154,7 +150,7 @@ const Login = () => {
                 onChangeText={setName}
             /> */}
 
-            <TouchableOpacity onPress={()=>onSignUp()} style={styles.loginButton}>
+            <TouchableOpacity onPress={()=>onSignIn()} style={styles.loginButton}>
                 <Text style={styles.loginButtonText}>로그인</Text>
             </TouchableOpacity>
 
@@ -170,7 +166,7 @@ const Login = () => {
             </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.signInButton}>
+            <TouchableOpacity onPress={()=> navigation.navigate('SignUp')} style={styles.signInButton}>
                 <Text style={styles.signInText}>Are You Ready 가입하기</Text>
             </TouchableOpacity>
 
@@ -186,9 +182,6 @@ const Login = () => {
                 <TouchableOpacity onPress={kakaoLogins}>
                     <Image source={kakaoIcon}/>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image source={facebookIcon}/>
-                </TouchableOpacity>
                 <TouchableOpacity onPress={onGoogleButtonPress}>
                     <Image source={googleIcon}/>
                 </TouchableOpacity>
@@ -202,16 +195,16 @@ const Login = () => {
 
 const styles = StyleSheet.create({
     firstContainer : {
-        flex: 0.9, flexDirection:'row', justifyContent: 'center', alignItems: 'center'
+        flex: 0.9, flexDirection:'row', justifyContent: 'center', alignItems: 'center', backgroundColor:'#eef0ed'
     },
     titleTextContainer: {
         alignSelf:'center', alignItems:'center'
     },
     firstTitleText: {
-        color:'#07AC7D', fontWeight:'bold', fontSize:15
+        color:'#333', fontWeight:'bold', fontSize:16
     },
     secondTitleText: {
-        color:'#07AC7D', fontWeight:'bold', fontSize:15
+        color:'#333', fontWeight:'bold', fontSize:16
     },
     loginTextInput: {
         backgroundColor:'#d9d9d9', borderRadius:10, flex:0.12, justifyContent:'center', marginTop:44, marginBottom:13
@@ -220,7 +213,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#d9d9d9', borderRadius:10, flex:0.12, justifyContent:'center'
     },
     loginButton: {
-        borderRadius:10, flex:0.12, justifyContent:'center', alignItems:'center', marginTop:13, backgroundColor:'#07AC7D'
+        borderRadius:10, flex:0.12, justifyContent:'center', alignItems:'center', marginTop:13, backgroundColor:'#333'
     },
     loginButtonText: {
         color:'#fff', fontWeight:'bold', fontSize:15
@@ -241,19 +234,19 @@ const styles = StyleSheet.create({
         borderRadius:10, flex:0.12, justifyContent:'center', alignItems:'center', marginTop:13
     },
     signInText: {
-        color:'#07ac7d', fontWeight:'bold', fontSize:15
+        color:'#333', fontWeight:'bold', fontSize:15
     },
     orContainer: {
         flexDirection:'row', alignItems:'center', marginBottom:13
     },
     orLeftBar: {
-        flex:1, height:1, backgroundColor:'#07ac7d', marginTop:23,
+        flex:1, height:1, backgroundColor:'#333', marginTop:23,
     },
     orText: {
-        marginHorizontal:13, marginTop:23, color:'#00adb5', fontWeight:'bold' 
+        marginHorizontal:13, marginTop:23, color:'#333', fontWeight:'bold' 
     },
     orRightBar: {
-        flex:1, height:1, backgroundColor:'#07ac7d', marginTop:23
+        flex:1, height:1, backgroundColor:'#333', marginTop:23
     },
     loginIconCantainer: {
         flexDirection:'row', justifyContent:'space-around', alignItems:'center', padding:16

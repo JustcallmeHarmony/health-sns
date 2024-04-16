@@ -1,13 +1,12 @@
 import firestore from '@react-native-firebase/firestore';
-import {retry} from 'react-native-track-player/lib/src/trackPlayer';
 
 export const userCollection = firestore().collection('users');
 
-export function creatUser({id, displayName, photoURL}) {
+export function createUser({id, nickName, phoneNumber}) {
   return userCollection.doc(id).set({
     id,
-    displayName,
-    photoURL,
+    nickName,
+    phoneNumber,
   });
 }
 

@@ -74,13 +74,26 @@ const FeedTab = () => {
       </Tab.Navigator>
     );
   };
+
+  const LoginTab = () => {
+    return (
+      <Stack.Navigator screenOptions={{
+        headerShown: false
+      }}>
+        <Stack.Screen name="Login" component={Login}/>
+        <Stack.Screen name="SignUp" component={SignUp}/>
+        
+      </Stack.Navigator>
+  
+    )
+  }
   
   const Router = () => {
     return (
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        {/* <Stack.Screen name="MainTab" component={MainTab} /> */}
-        <Stack.Screen name="Login" component={Login} />
-        {/* <Stack.Screen name="SignIn" component={SignUp} /> */}
+        <Stack.Screen name="LoginTab" component={LoginTab} />
+        <Stack.Screen name="MainTab" component={MainTab} />
+        
       </Stack.Navigator>
     );
   };
