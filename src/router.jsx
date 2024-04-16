@@ -12,6 +12,7 @@ import MakeNextFeed from "./pages/MakeNextFeed";
 import DmList from "./pages/DmList";
 import Dm from "./pages/Dm";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 
 const Stack = createStackNavigator();
@@ -79,6 +80,7 @@ const FeedTab = () => {
       <Stack.Navigator screenOptions={{headerShown: false}}>
         {/* <Stack.Screen name="MainTab" component={MainTab} /> */}
         <Stack.Screen name="Login" component={Login} />
+        {/* <Stack.Screen name="SignIn" component={SignUp} /> */}
       </Stack.Navigator>
     );
   };

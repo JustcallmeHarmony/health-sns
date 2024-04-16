@@ -28,8 +28,9 @@ end
 target 'health_sns' do
   $RNFirebaseAsStaticFramework = true
   config = use_native_modules!
-  
+  pod 'naveridlogin-sdk-ios'
   pod 'FirebaseAuth' 
+  pod 'GoogleSignIn'
   pod 'FirebaseFirestore'
   use_frameworks! :linkage => :static
   pod 'GoogleUtilities', :modular_headers => true
