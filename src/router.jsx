@@ -13,6 +13,8 @@ import DmList from "./pages/DmList";
 import Dm from "./pages/Dm";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import SearchId from "./pages/SearchUser/SearchId";
+import SearchPassword from "./pages/SearchUser/SearchPassword";
 
 
 const Stack = createStackNavigator();
@@ -82,6 +84,8 @@ const FeedTab = () => {
       }}>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="SignUp" component={SignUp}/>
+        <Stack.Screen name="SearchId" component={SearchId}/>
+        <Stack.Screen name="SearchPassword" component={SearchPassword}/>
         
       </Stack.Navigator>
   
