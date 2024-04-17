@@ -43,7 +43,7 @@ const SearchLogin = ({navigation}) => {
           </View>
           <View>
            <TouchableOpacity  style={styles.signInButton}>
-          <Text style={styles.signInText}>완료</Text>
+          <Text style={styles.signInText}>test완료</Text>
         </TouchableOpacity>
       </View>
     
