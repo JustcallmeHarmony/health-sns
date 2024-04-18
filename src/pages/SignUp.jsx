@@ -27,7 +27,8 @@ const SignUp = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordErrorVisible, setPasswordErrorVisible] = useState(false);
-  const [passwordMismatchErrorVisible, setPasswordMismatchErrorVisible] = useState(false);
+  const [passwordMismatchErrorVisible, setPasswordMismatchErrorVisible] =
+    useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [confirmation, setConfirmation] = useState(null);
   const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
@@ -100,7 +101,8 @@ const SignUp = ({navigation}) => {
 
   // 비밀번호 중복 확인 함수
   const checkPasswordDuplicate = text => {
-    if (text.length > 0 && password !== text) { // 비밀번호 확인 입력란이 비어있는지 확인
+    if (text.length > 0 && password !== text) {
+      // 비밀번호 확인 입력란이 비어있는지 확인
       console.log('비밀번호가 일치하지 않습니다.');
       setPasswordMismatchErrorVisible(true);
     } else {
@@ -152,7 +154,6 @@ const SignUp = ({navigation}) => {
         '이메일 중복 확인 중 오류가 발생했습니다.',
       );
     }
-    
   };
 
   // 닉네임 중복 확인 함수
@@ -162,7 +163,7 @@ const SignUp = ({navigation}) => {
         .collection('users')
         .where('nickName', '==', nickName)
         .get();
-  
+
       if (!userQuery.empty) {
         Alert.alert('중복된 닉네임', '이미 사용 중인 닉네임입니다.');
       } else {
@@ -170,7 +171,10 @@ const SignUp = ({navigation}) => {
       }
     } catch (error) {
       console.error('닉네임 중복 확인 오류:', error);
-      Alert.alert('닉네임 중복 확인 실패', '닉네임 중복 확인 중 오류가 발생했습니다.');
+      Alert.alert(
+        '닉네임 중복 확인 실패',
+        '닉네임 중복 확인 중 오류가 발생했습니다.',
+      );
     }
   };
 
@@ -503,4 +507,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignUp;
-
